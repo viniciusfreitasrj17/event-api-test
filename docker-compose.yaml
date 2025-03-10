@@ -1,0 +1,35 @@
+version: "3.2"
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 20s
+      retries: 5
+  
+  api:
+    build: ./api
+    environment:
+      - HOST_URL=localhost:3000
+      - RMQ_USER=${RABBITMQ_DEFAULT_USER:-admin}
+      - RMQ_PASS=${RABBITMQ_DEFAULT_PASS:-admin}
+      - RMQ_HOST=${RABBITMQ_DEFAULT_HOST:-rabbitmq}
+      - RMQ_PORT=${RABBITMQ_DEFAULT_PORT:-5672}
+      - MESSAGE_QUEUE=events.logs
+    volumes:
+      - ./api/:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      rabbitmq:
+        condition: service_healthy

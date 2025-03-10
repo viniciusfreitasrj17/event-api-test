@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto'
 import { IEvent } from '../interfaces/IEvent'
 import { IService } from '../interfaces/IService'
+import { sendMessage } from '../queue/sendMessage'
 
 export class EventsService implements IService {
   constructor (
@@ -8,7 +9,9 @@ export class EventsService implements IService {
   ) {}
 
   add (e: IEvent) {
-    this.events.set(randomUUID(), e)
+    const id = randomUUID()
+    this.events.set(id, e)
+    sendMessage(id, e, 'add')
   }
 
   get () {
@@ -26,10 +29,15 @@ export class EventsService implements IService {
     if (this.events.has(id)) {
       const event = this.events.get(id)
       this.events.set(id, { ...(event as IEvent), text })
+      sendMessage(id, event as IEvent, 'update')
     }
   }
 
   delete (id: string) {
-    this.events.delete(id)
+    if (this.events.has(id)) {
+      const event = this.events.get(id)
+      this.events.delete(id)
+      sendMessage(id, event as IEvent, 'delete')
+    }
   }
 }
