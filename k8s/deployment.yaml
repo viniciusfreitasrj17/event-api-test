@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: api
+  namespace: events
+  labels:
+    version: 0.0.1
+    app: api-app
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: api-pod
+      app: api-app
+
+  template:
+    metadata:
+      name: api-pod
+      labels:
+        name: api-pod
+        app: api-app
+
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: events-cm
+        name: api
+        image: username/api:latest # chenge_me
+        imagePullPolicy: Always
+
+        ports:
+        - name: port3000
+          containerPort: 3000
+
+      imagePullSecrets:
+      - name: secretkey # chenge_me
+---
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: logger
+  namespace: events
+  labels:
+    version: 0.0.1
+    app: logger-app
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: logger-pod
+      app: logger-app
+
+  template:
+    metadata:
+      name: logger-pod
+      labels:
+        name: logger-pod
+        app: logger-app
+
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: events-cm
+        name: logger
+        image: username/logger:latest # chenge_me
+        imagePullPolicy: Always
+
+      imagePullSecrets:
+      - name: secretkey # chenge_me
+---
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: rabbitmq
+  namespace: events
+  labels:
+    version: 0.0.1
+    app: rabbitmq-app
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: rabbitmq-pod
+      app: rabbitmq-app
+
+  template:
+    metadata:
+      name: rabbitmq-pod
+      labels:
+        name: rabbitmq-pod
+        app: rabbitmq-app
+
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: rabbitmq
+        image: rabbitmq:3-management-alpine
+        imagePullPolicy: Always
+
+        ports:
+        - name: port5672
+          containerPort: 5672

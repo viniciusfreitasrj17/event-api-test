@@ -20,7 +20,6 @@ services:
   api:
     build: ./api
     environment:
-      - HOST_URL=localhost:3000
       - RMQ_USER=${RABBITMQ_DEFAULT_USER:-admin}
       - RMQ_PASS=${RABBITMQ_DEFAULT_PASS:-admin}
       - RMQ_HOST=${RABBITMQ_DEFAULT_HOST:-rabbitmq}
@@ -37,7 +36,6 @@ services:
   logger:
     build: ./logger
     environment:
-      - HOST_URL=localhost:3000
       - RMQ_USER=${RABBITMQ_DEFAULT_USER:-admin}
       - RMQ_PASS=${RABBITMQ_DEFAULT_PASS:-admin}
       - RMQ_HOST=${RABBITMQ_DEFAULT_HOST:-rabbitmq}
