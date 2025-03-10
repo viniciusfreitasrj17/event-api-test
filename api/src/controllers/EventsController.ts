@@ -48,34 +48,46 @@ export class EventsController implements IController {
   }
 
   getOne (req: Request, res: Response) {
+    if (!req.params.id) {
+      res.status(400).json({ erro: 'ID required' })
+    }
+
     const event = this._eventsService.getOne(req.params.id)
     if (!event) {
-      res.status(400).json({ erro: 'Not Found' })
+      res.status(404).json({ erro: 'Not Found Event' })
     } else {
       res.json({ result: event })
     }
   }
 
   update (req: Request, res: Response) {
+    if (!req.params.id) {
+      res.status(400).json({ erro: 'ID required' })
+    }
+
     const event = this._eventsService.getOne(req.params.id)
     if (!event) {
-      res.status(400).json({ erro: 'Not Found' })
+      res.status(404).json({ erro: 'Not Found Event' })
     } else {
       const { text } = req.body
 
       this._eventsService.update(req.params.id, String(text))
 
-      res.send()
+      res.status(204).send()
     }
   }
 
   delete (req: Request, res: Response) {
+    if (!req.params.id) {
+      res.status(400).json({ erro: 'ID required' })
+    }
+
     const event = this._eventsService.getOne(req.params.id)
     if (!event) {
-      res.status(400).json({ erro: 'Not Found' })
+      res.status(404).json({ erro: 'Not Found Event' })
     } else {
       this._eventsService.delete(req.params.id)
-      res.send()
+      res.status(204).send()
     }
   }
 
