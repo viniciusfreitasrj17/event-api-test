@@ -28,8 +28,9 @@ export class EventsService implements IService {
   update (id: string, text: string) {
     if (this.events.has(id)) {
       const event = this.events.get(id)
-      this.events.set(id, { ...(event as IEvent), text })
-      sendMessage(id, event as IEvent, 'update')
+      const newEvent = { ...(event as IEvent), text }
+      this.events.set(id, newEvent)
+      sendMessage(id, newEvent, 'update')
     }
   }
 
