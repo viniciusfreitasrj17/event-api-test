@@ -64,7 +64,7 @@ docker logs -f event-api-test-logger-1
    4. Atualizando um evento:
 
       ```sh
-      curl -X POST 'localhost:3000/events/b0d545d2-dd95-4dd3-91e9-acd43bb0268f' \
+      curl -X PUT 'localhost:3000/events/b0d545d2-dd95-4dd3-91e9-acd43bb0268f' \
         -H "Content-Type: application/json" \
         -d '{"text":"New User Registred"}'
       ```
