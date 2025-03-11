@@ -1,6 +1,4 @@
-import { IBase } from './IBase'
-
-export interface IEvent extends IBase {
+export interface IEvent {
   text: string
   owner: string
   type?: string
