@@ -144,7 +144,7 @@ routes.get('/:id', async (req, res) => { eventsController.getOne(req, res) })
  *       500:
  *         description: Error interno no servidor.
  */
-routes.put('/:id', async (req, res) => { eventsController.update(req, res) })
+routes.patch('/:id', async (req, res) => { eventsController.update(req, res) })
 
 /**
  * @swagger
